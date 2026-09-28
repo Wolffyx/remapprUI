@@ -55,8 +55,12 @@ const Toaster = ({ ...props }: ToasterProps): JSX.Element => {
                     '--border-radius': 'var(--radius)',
                 } as CSSProperties
             }
-            // Sonner's own button rule outranks a plain utility class.
             toastOptions={{
+                // Top toasts sit over the Electron title bar, a drag region
+                // that swallows clicks on anything above it that doesn't opt
+                // out. No effect in a browser.
+                style: { WebkitAppRegion: 'no-drag' } as CSSProperties,
+                // Sonner's own button rule outranks a plain utility class.
                 classNames: {
                     actionButton: 'bg-primary! text-primary-foreground!',
                 },
