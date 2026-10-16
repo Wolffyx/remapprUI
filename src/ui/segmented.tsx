@@ -2,14 +2,15 @@
 // control primitive (generic over option value), no abstraction warranted.
 import { cn } from '@/lib/cn'
 
-/** Inline segmented control (matches the prototype's Segmented). */
+/** Inline segmented control (matches the prototype's Segmented). An option
+ *  can be `disabled`, with a `title` saying why. */
 export function Segmented<T extends string>({
     value,
     options,
     onChange,
 }: {
     value: T
-    options: { value: T; label: string }[]
+    options: { value: T; label: string; disabled?: boolean; title?: string }[]
     onChange: (v: T) => void
 }): JSX.Element {
     return (
@@ -20,12 +21,15 @@ export function Segmented<T extends string>({
                     <button
                         key={o.value}
                         type="button"
+                        disabled={o.disabled}
+                        title={o.title}
                         onClick={() => onChange(o.value)}
                         className={cn(
                             'rounded-md px-3 py-1.5 text-[12.5px] font-semibold transition-colors',
                             active
                                 ? 'bg-background text-foreground shadow-sm'
                                 : 'text-muted-foreground hover:text-foreground',
+                            'disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-muted-foreground',
                         )}
                     >
                         {o.label}
