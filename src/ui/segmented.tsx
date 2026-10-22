@@ -25,7 +25,7 @@ export function Segmented<T extends string>({
                         title={o.title}
                         onClick={() => onChange(o.value)}
                         className={cn(
-                            'rounded-md px-3 py-1.5 text-[12.5px] font-semibold transition-colors',
+                            'rounded-md px-3 py-1.5 text-control font-semibold transition-colors',
                             active
                                 ? 'bg-background text-foreground shadow-sm'
                                 : 'text-muted-foreground hover:text-foreground',

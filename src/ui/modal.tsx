@@ -143,7 +143,7 @@ export function Modal({
                 // centered), 16px radius, soft drop shadow, body scrolls when tall.
                 // twMerge lets these override the shadcn Dialog base classes.
                 className={cn(
-                    'top-[7vh] max-h-[86vh] translate-y-0 overflow-y-auto rounded-2xl shadow-[0_30px_70px_-20px_rgba(0,0,0,0.7)]',
+                    'top-[7vh] max-h-[86vh] translate-y-0 overflow-y-auto rounded-modal shadow-[0_30px_70px_-20px_rgba(0,0,0,0.7)]',
                     customModalBoxClass,
                 )}
                 showCloseButton={xButton}
@@ -175,7 +175,7 @@ export function Modal({
                         </Button>
                     )}
                     {headerIcon && (
-                        <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-primary/15 text-primary [&_svg]:size-[18px]">
+                        <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary/15 text-primary [&_svg]:size-[18px]">
                             {headerIcon}
                         </span>
                     )}

@@ -17,7 +17,7 @@ const badgeVariants = cva(
                 outline: 'text-foreground',
                 // Category colour from a `--badge-tone` CSS variable the caller sets
                 // (e.g. a news tag): tinted, or filled with `tone-solid`.
-                tone: 'border-transparent bg-[color-mix(in_oklch,var(--badge-tone)_15%,transparent)] text-[var(--badge-tone)]',
+                tone: 'border-transparent bg-[color-mix(in_oklab,var(--badge-tone)_15%,transparent)] text-[var(--badge-tone)]',
                 'tone-solid':
                     'border-transparent bg-[var(--badge-tone)] text-background',
             },
