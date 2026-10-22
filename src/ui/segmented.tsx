@@ -8,19 +8,28 @@ export function Segmented<T extends string>({
     value,
     options,
     onChange,
+    label,
 }: {
     value: T
     options: { value: T; label: string; disabled?: boolean; title?: string }[]
     onChange: (v: T) => void
+    /** Accessible name for the group. */
+    label?: string
 }): JSX.Element {
     return (
-        <div className="inline-flex gap-0.5 rounded-lg border border-border bg-secondary p-0.5">
+        <div
+            role="radiogroup"
+            aria-label={label}
+            className="inline-flex gap-0.5 rounded-lg border border-border bg-secondary p-0.5"
+        >
             {options.map((o) => {
                 const active = o.value === value
                 return (
                     <button
                         key={o.value}
                         type="button"
+                        role="radio"
+                        aria-checked={active}
                         disabled={o.disabled}
                         title={o.title}
                         onClick={() => onChange(o.value)}

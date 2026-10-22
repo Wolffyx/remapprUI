@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, Zap } from 'lucide-react'
 import {
     Dialog,
     DialogClose,
@@ -27,6 +27,21 @@ const TextTrigger = React.forwardRef<
     ),
 )
 TextTrigger.displayName = 'TextTrigger'
+
+/** Design-system widths. Below each, the dialog fills the window less 2rem. */
+const SIZE_CLASS = {
+    sm: 'max-w-[min(480px,calc(100%-2rem))]',
+    md: 'max-w-[min(720px,calc(100%-2rem))]',
+    lg: 'max-w-[min(960px,calc(100%-2rem))]',
+} as const
+
+export type ModalSize = keyof typeof SIZE_CLASS
+
+/** What the dialog does decides its footer:
+ *  - `edit`: Cancel + Save (labels via `close` / `success`), on the right.
+ *  - `readonly`: a single Close.
+ *  - `live`: no buttons; a note that changes apply right away. */
+export type ModalKind = 'edit' | 'readonly' | 'live'
 
 export interface ModernModalProps {
     opened?: boolean
@@ -59,6 +74,10 @@ export interface ModernModalProps {
     children?: React.ReactNode
     isDismissable?: boolean
     showFooter?: boolean
+    /** Width step; default `md`. */
+    size?: ModalSize
+    /** Footer rule; default `edit`. A custom `footer` replaces the buttons. */
+    kind?: ModalKind
 }
 
 export function Modal({
@@ -72,7 +91,7 @@ export function Modal({
     customModalBoxClass = '',
     xButton = true,
     close = 'Cancel',
-    success = 'OK',
+    success = 'Save',
     showFooter = true,
     title,
     headerIcon,
@@ -82,6 +101,8 @@ export function Modal({
     footer,
     children,
     isDismissable = false,
+    size = 'md',
+    kind = 'edit',
 }: ModernModalProps): JSX.Element {
     const isControlled = opened !== undefined
     const [isOpen, setIsOpen] = useState(opened ?? false)
@@ -144,6 +165,7 @@ export function Modal({
                 // twMerge lets these override the shadcn Dialog base classes.
                 className={cn(
                     'top-[7vh] max-h-[86vh] translate-y-0 overflow-y-auto rounded-modal shadow-[0_30px_70px_-20px_rgba(0,0,0,0.7)]',
+                    SIZE_CLASS[size],
                     customModalBoxClass,
                 )}
                 showCloseButton={xButton}
@@ -202,26 +224,68 @@ export function Modal({
                     </DialogFooter>
                 ) : (
                     showFooter && (
-                        <DialogFooter>
-                            {close && (
-                                <DialogClose asChild>
-                                    <Button
-                                        variant="outline"
-                                        onClick={handleClose}
-                                    >
-                                        {close}
-                                    </Button>
-                                </DialogClose>
-                            )}
-                            {success && (
-                                <Button type="submit" onClick={handleOk}>
-                                    {success}
-                                </Button>
-                            )}
-                        </DialogFooter>
+                        <ModalFooter
+                            kind={kind}
+                            close={close}
+                            success={success}
+                            onClose={handleClose}
+                            onOk={handleOk}
+                        />
                     )
                 )}
             </DialogContent>
         </Dialog>
+    )
+}
+
+function ModalFooter({
+    kind,
+    close,
+    success,
+    onClose,
+    onOk,
+}: {
+    kind: ModalKind
+    close: string | boolean
+    success: string | boolean
+    onClose: () => void
+    onOk: () => Promise<void>
+}): JSX.Element {
+    if (kind === 'live') {
+        return (
+            <DialogFooter className="border-t pt-4 sm:justify-start">
+                <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Zap className="size-3.5" />
+                    Changes apply right away
+                </span>
+            </DialogFooter>
+        )
+    }
+    if (kind === 'readonly') {
+        return (
+            <DialogFooter className="border-t pt-4">
+                <DialogClose asChild>
+                    <Button variant="outline" onClick={onClose}>
+                        Close
+                    </Button>
+                </DialogClose>
+            </DialogFooter>
+        )
+    }
+    return (
+        <DialogFooter className="border-t pt-4">
+            {close && (
+                <DialogClose asChild>
+                    <Button variant="outline" onClick={onClose}>
+                        {close}
+                    </Button>
+                </DialogClose>
+            )}
+            {success && (
+                <Button type="submit" onClick={onOk}>
+                    {success}
+                </Button>
+            )}
+        </DialogFooter>
     )
 }
