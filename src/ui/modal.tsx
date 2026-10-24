@@ -64,8 +64,9 @@ export interface ModernModalProps {
     title?: string
     /** Design-style header: small line-icon shown in a tinted chip beside the title. */
     headerIcon?: JSX.Element
-    /** Muted one-line caption under the title in the header. */
-    subtitle?: string
+    /** Muted one-line caption under the title in the header; may end in a
+     *  `LearnMore` link. */
+    subtitle?: React.ReactNode
     /** When set, a back chevron is shown at the header's left edge. */
     onBack?: () => void
     description?: string
