@@ -155,6 +155,8 @@ export function Modal({
                         variant={variant}
                         size="icon"
                         className="cursor-pointer"
+                        // An icon-only trigger is named by its dialog's title.
+                        aria-label={title}
                     >
                         {icon}
                     </Button>
